@@ -11,8 +11,6 @@ from .serializers import *
 from .permissions import EligibleAdmin, UnblockedAdmin
 import json
 
-def ReactEstablishment(request):
-    return render(request, 'index.html')
 
 def get_referer(request):
     referer = request.META.get('HTTP_REFERER')

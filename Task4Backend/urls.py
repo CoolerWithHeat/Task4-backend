@@ -10,7 +10,4 @@ urlpatterns = [
     path('LockUsers/<str:action_type>/', AdjustStatus.as_view()),
     path('UnLockUsers/<str:action_type>/', AdjustStatus.as_view()),
     path('DeleteUsers/', DeleteUsers.as_view()),
-    path('admin/', ReactEstablishment),
-    path('login/', ReactEstablishment),
-    re_path(r'^.*$', lambda request: redirect('/login/'), name='catch_all')
 ]
