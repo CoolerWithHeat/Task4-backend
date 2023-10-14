@@ -34,7 +34,6 @@ class Authenticate(APIView):
         else:
             return Response({'error': 'user not found'}, status=401)
 
-
 class GetAllUsers(APIView):
     permission_classes = [EligibleAdmin]
     def get(self, request, *args, **kwargs):
