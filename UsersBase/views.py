@@ -81,3 +81,22 @@ class DeleteUsers(APIView):
             return Response({'DeletedUsers': ID_list, 'currentDeleted':currentDeleted}, status=200)
         except:
             return Response({'error': 'Something Went Wrong'}, status=500)
+        
+
+class RegisterUser(APIView):
+    def post(self, request, *args, **kwargs):
+        body = json.loads(request.body) if request.body else None
+        email = body.get('email', None)
+        first_name = body.get('first_name', None)
+        password = body.get('password', None)
+
+        if (email.endswith('@gmail.com') and first_name and password):
+            try:
+                already_registered = get_user_model().objects.get(email=email)
+                return Response({'error': 'User Already exists!'}, status=409) if already_registered else Exception
+            except:
+                new_user = get_user_model().objects.create(email=email, password=password, Name=first_name)
+                token, created = Token.objects.get_or_create(user=new_user)
+                return Response({'message': 'successful!', 'token':f'{token}'}, status=200)
+        else:
+            return Response({'error': 'insufficient or invalid Credentials!'}, status=500)

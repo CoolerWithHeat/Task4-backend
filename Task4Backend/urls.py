@@ -5,9 +5,11 @@ from rest_framework.authtoken.views import obtain_auth_token
 from UsersBase.views import *
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('auth/', Authenticate.as_view()),
     path('GetUsers/', GetAllUsers.as_view()),
     path('LockUsers/<str:action_type>/', AdjustStatus.as_view()),
     path('UnLockUsers/<str:action_type>/', AdjustStatus.as_view()),
     path('DeleteUsers/', DeleteUsers.as_view()),
+    path('SignUp/', RegisterUser.as_view()),
 ]
