@@ -11,7 +11,6 @@ from .serializers import *
 from .permissions import EligibleAdmin, UnblockedAdmin
 import json
 
-
 def get_referer(request):
     referer = request.META.get('HTTP_REFERER')
     return referer
