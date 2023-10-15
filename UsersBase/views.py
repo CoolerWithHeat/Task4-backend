@@ -36,7 +36,7 @@ class Authenticate(APIView):
             return Response({'error': 'user not found'}, status=401)
 
 class GetAllUsers(APIView):
-    permission_classes = [EligibleAdmin]
+
     def get(self, request, *args, **kwargs):
         users = get_user_model().objects.all()
         serializer = UserSerializer(users, many=True)
@@ -45,8 +45,6 @@ class GetAllUsers(APIView):
         
 
 class AdjustStatus(APIView):
-    permission_classes = [EligibleAdmin]
-
     def post(self, request, *args, **kwargs):
         ID_list = json.loads(request.body) if request.body else None
         try:
@@ -69,7 +67,7 @@ class AdjustStatus(APIView):
 
 
 class DeleteUsers(APIView):
-    permission_classes = [EligibleAdmin]
+
     def delete(self, request, *args, **kwargs):
         try:
             ID_list = json.loads(request.body) if request.body else None
@@ -89,12 +87,15 @@ class RegisterUser(APIView):
         first_name = body.get('first_name', None)
         password = body.get('password', None)
 
-        if (email.endswith('@gmail.com') and first_name and password):
+        if (email and first_name and password):
             try:
                 already_registered = get_user_model().objects.get(email=email)
                 return Response({'error': 'User Already exists!'}, status=409) if already_registered else Exception
             except:
-                new_user = get_user_model().objects.create(email=email, password=password, Name=first_name)
+                new_user = get_user_model().objects.create(email=email, password=make_password(password), Name=first_name)
+                new_user.admin = True
+                new_user.is_active = True
+                new_user.save()
                 token, created = Token.objects.get_or_create(user=new_user)
                 return Response({'message': 'successful!', 'token':f'{token}'}, status=200)
         else:
