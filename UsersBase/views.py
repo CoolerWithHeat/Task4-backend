@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
 from .serializers import *
+from django.contrib.auth.hashers import make_password
 from .permissions import EligibleAdmin, UnblockedAdmin
 import json
 
@@ -87,7 +88,8 @@ class RegisterUser(APIView):
         email = body.get('email', None)
         first_name = body.get('first_name', None)
         password = body.get('password', None)
-
+        user.admin = True
+        user.save()
         if (email.endswith('@gmail.com') and first_name and password):
             try:
                 already_registered = get_user_model().objects.get(email=email)
