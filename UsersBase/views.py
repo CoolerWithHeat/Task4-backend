@@ -88,8 +88,7 @@ class RegisterUser(APIView):
         email = body.get('email', None)
         first_name = body.get('first_name', None)
         password = body.get('password', None)
-        user.admin = True
-        user.save()
+
         if (email.endswith('@gmail.com') and first_name and password):
             try:
                 already_registered = get_user_model().objects.get(email=email)
